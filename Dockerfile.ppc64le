@@ -1,0 +1,25 @@
+FROM ppc64le/ubuntu:xenial
+
+RUN apt-get update -y && \
+    apt-get install -y curl grafana
+
+#Required for grafana v 2.6 to support multiple query statements
+
+RUN sed -i 's/join("\\n")/join(";\\n")/'  \
+    /usr/share/grafana/public/app/plugins/datasource/influxdb/datasource.js
+
+RUN apt-get clean -y
+
+RUN curl -L https://github.com/tianon/gosu/releases/download/1.9/gosu-ppc64el > /usr/sbin/gosu && \
+    chmod +x /usr/sbin/gosu 
+
+RUN ln -s /usr/sbin/grafana /usr/sbin/grafana-server
+
+VOLUME ["/var/lib/grafana", "/var/lib/grafana/plugins", "/var/log/grafana", "/etc/grafana"]
+
+EXPOSE 3000
+
+COPY ./run.sh /run.sh
+
+ENTRYPOINT ["/run.sh"]
+
