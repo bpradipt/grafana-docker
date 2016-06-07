@@ -1,6 +1,11 @@
 # Grafana Docker image
 
 This project builds a Docker image with the latest master build of Grafana.
+On Power PC LE platform (ppc64le) execute the following steps after cloning the repo
+cd grafana-docker
+git checkout -b ppc64le origin/ppc64le 
+./build.sh 2.6.0 2.6.0
+This will create a grafana/grafana:2.6.0 docker image
 
 ## Running your Grafana container
 
